@@ -32,3 +32,9 @@ override.tf.json
 # Ignore CLI configuration files
 .terraformrc
 terraform.rc
+
+# Do not push to git the compressed version of the labmda functions. only source code.
+*.zip
+
+# Do not push TF lock file
+.terraform.lock*
