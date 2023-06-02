@@ -1,27 +1,26 @@
-import boto3
 import json
-import uuid
+import boto3
 
 def lambda_handler(event, context):
-    # Retrieve input from event
-    input_json = event['input']
-    input_string = input_json['string']
-    input_character = input_json['character']
-    
-    # Calculate the number of occurrences of the character in the string
-    occurrences = input_string.count(input_character)
-    
-    # Generate a unique identifier
-    result_id = str(uuid.uuid4())
-    
-    # Write the result to DynamoDB
-    dynamodb = boto3.resource('dynamodb')
-    table = dynamodb.Table('occr_table')  # Replace with your DynamoDB table name
-    table.put_item(Item={'id': result_id, 'occurrences': occurrences})
-    
-    # Prepare response
-    response = {
-        'result_id': result_id
-    }
-    
-    return response
+    # Get the ID from the event
+    id = event["id"]
+
+    # Get the DynamoDB client
+    dynamodb = boto3.client("dynamodb")
+
+    # Get the item from the DynamoDB table
+    response = dynamodb.get_item(
+        TableName="occurrence-table",
+        Key={"id":id}
+    )
+
+    # Check if the item was found
+    if "Item" in response:
+        # Get the value from the item
+        value = response["Item"]["value"]
+
+        # Return the value
+        return value
+
+    # The item was not found
+    return None

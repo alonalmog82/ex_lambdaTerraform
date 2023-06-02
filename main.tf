@@ -1,11 +1,8 @@
 provider "aws" {
   access_key = var.access_key
   secret_key = var.secret_key
-  region = "eu-central-1"
+  region = var.aws_region
 }
-
-variable access_key {}
-variable secret_key {}
 
 /* Template of how to deploy an EC2 instance on each AZ
 resource "aws_instance" "ec2_instances" {

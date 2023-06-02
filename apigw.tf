@@ -1,3 +1,28 @@
+data "aws_iam_policy_document" "apigw_policy" {
+  statement {
+    sid    = ""
+    effect = "Allow"
+
+    principals {
+      identifiers = ["apigateway.amazonaws.com"]
+      type        = "Service"
+    }
+
+    actions = ["sts:AssumeRole", ]
+  }
+}
+
+resource "aws_iam_role" "iam_for_apigw" {
+  name               = "iam_for_apigw"
+  assume_role_policy = "${data.aws_iam_policy_document.apigw_policy.json}"
+}
+
+resource "aws_iam_role_policy_attachment" "apigw_policy_attachment" {
+  role       = aws_iam_role.iam_for_apigw.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonAPIGatewayInvokeFullAccess"
+}
+ 
+
 resource "aws_api_gateway_rest_api" "exercise_api" {
   name        = "exercise-api"
   description = "Exercise API Gateway"

@@ -12,7 +12,7 @@ data "archive_file" "zip_read" {
   output_path = "ex_lambda_readbyid.zip"
 }
 
-data "aws_iam_policy_document" "policy" {
+data "aws_iam_policy_document" "labmda_policy" {
   statement {
     sid    = ""
     effect = "Allow"
@@ -22,13 +22,18 @@ data "aws_iam_policy_document" "policy" {
       type        = "Service"
     }
 
-    actions = ["sts:AssumeRole"]
+    actions = ["sts:AssumeRole", ]
   }
 }
 
 resource "aws_iam_role" "iam_for_lambda" {
   name               = "iam_for_lambda"
-  assume_role_policy = "${data.aws_iam_policy_document.policy.json}"
+  assume_role_policy = "${data.aws_iam_policy_document.lambda_policy.json}"
+}
+
+resource "aws_iam_role_policy_attachment" "dynamodb_policy_attachment" {
+  role       = aws_iam_role.iam_for_lambda.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess"
 }
 
 resource "aws_lambda_function" "calculate_occurrences" {
