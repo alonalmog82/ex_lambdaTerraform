@@ -1,5 +1,6 @@
 provider "archive" {}
 
+
 data "archive_file" "zip_occr" {
   type        = "zip"
   source_file = "ex_lambda_calc_occr.py"
