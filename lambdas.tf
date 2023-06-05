@@ -12,7 +12,7 @@ data "archive_file" "zip_read" {
   output_path = "ex_lambda_readbyid.zip"
 }
 
-data "aws_iam_policy_document" "labmda_policy" {
+data "aws_iam_policy_document" "lambda_policy" {
   statement {
     sid    = ""
     effect = "Allow"
